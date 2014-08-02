@@ -7,7 +7,43 @@
     <meta name="description" content="FreeCores : A home for open source hardware cores" />
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
+    <link rel="stylesheet" type="text/css" media="screen" href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css">
+    <script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" language="javascript">
+    repos_data = [];
+    function process_data(data) {
+      data.forEach(function(a) {
+        update = a.updated_at.substring(0,10);
+        repos_data.push(
+          ['<a href="https://github.com/freecores/' + a.name + '">' +
+              a.name +
+           '</a>',
+           a.language, a.size, update, a.description]);
+      });
+      if(!data.length) {
+        $('#loading').hide();
+        $('#repos').show();
+        $('#repos').dataTable({
+          "data": repos_data,
+          "iDisplayLength": 100
+        });
+        return true;
+      }
+      return false;
+    }
+    function get_repos_page(page) {
+      url = 'https://api.github.com/orgs/freecores/repos?per_page=100&page=';
+      $.get(url + page, function(data) {
+        if(!process_data(data)) {
+          get_repos_page(page + 1);
+        }
+      });
+    }
+    $(document).ready(function() {
+      get_repos_page(1);
+    });
+    </script>
     <title>FreeCores</title>
   </head>
 
@@ -40,20 +76,34 @@
 <p>If you're the author of a core that we have, please let us know and we can add you as an member on that project.</p>
 
 <h3>
+<a name="repos" class="anchor" href="#repos"><span class="octicon octicon-link"></span></a>Repositories</h3>
+<span id="loading">Loading repositories from GitHub ...</span>
+<table id="repos" class="stripe hover order-column row-border compact" cellspacing="0" width="100%" style="display: none">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Language</th>
+      <th>Size</th>
+      <th style="width: 5em">Updated</th>
+      <th width="50%">Description</th>
+    </tr>
+  </thead>
+  <tfoot>
+    <tr>
+      <th>Name</th>
+      <th>Language</th>
+      <th>Size</th>
+      <th>Updated</th>
+      <th>Description</th>
+    </tr>
+  </tfoot>
+</table>
+
+<h3>
 <a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
 
 <p>While not officially the support channel for FreeCores, jump into #openrisc on FreeNode and we will assist you.</p>
       </section>
     </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
-
-    
-
   </body>
 </html>
