@@ -7,19 +7,20 @@
     <meta name="description" content="FreeCores : A home for open source hardware cores" />
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css">
-    <script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="https://cdn.datatables.net/1.10.2/css/jquery.dataTables.css">
+    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" language="javascript">
     repos_data = [];
     function process_data(data) {
       data.forEach(function(a) {
         update = a.updated_at.substring(0,10);
+        pushed = a.pushed_at.substring(0,10);
         repos_data.push(
           ['<a href="https://github.com/freecores/' + a.name + '">' +
               a.name +
            '</a>',
-           a.language, a.size, update, a.description]);
+           a.language, a.size, update, pushed, a.description]);
       });
       if(!data.length) {
         $('#loading').hide();
@@ -85,6 +86,7 @@
       <th>Language</th>
       <th>Size</th>
       <th style="width: 5em">Updated</th>
+      <th style="width: 5em">Pushed</th>
       <th width="50%">Description</th>
     </tr>
   </thead>
@@ -94,6 +96,7 @@
       <th>Language</th>
       <th>Size</th>
       <th>Updated</th>
+      <th>Pushed</th>
       <th>Description</th>
     </tr>
   </tfoot>
